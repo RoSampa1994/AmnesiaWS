@@ -21,13 +21,13 @@ import ws.modelo.Login;
 import ws.modelo.Quadro;
 import ws.modelo.Tarefa;
 
-@Path("amnesia")
-public class principal {
+@Path("generics")
+public class amnesiaWS {
 
     @Context
     private UriInfo context;
 
-    public principal() {
+    public amnesiaWS() {
     }
     
     /*LOGIN*/
@@ -67,11 +67,6 @@ public class principal {
         
     }     
     /*TAREFA*/
-    private Tarefa objetopopular(String json){
-    Gson g = new Gson();
-    Tarefa objtarefa = (Tarefa) g.fromJson(json, Tarefa.class);
-    return objtarefa;
-    }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("tarefa/get/{quadroID}")
@@ -97,9 +92,10 @@ public class principal {
     @Path("tarefa/alterar")
     public void alterarTarefa(String content) throws SQLException, ClassNotFoundException {
         TarefaDAO objtarefadao = new TarefaDAO();
-        objtarefadao.descricaoalterar(objetopopular(content));
+        Gson g = new Gson();
+        Tarefa objtarefa = (Tarefa) g.fromJson(content, Tarefa.class);        
+        objtarefadao.descricaoalterar(objtarefa);
     }     
-
     @DELETE
     @Path("tarefa/excluir/{tarefaID}")
     public void excluirTarefa(@PathParam("tarefaID") String tarefaID) throws SQLException, ClassNotFoundException{
